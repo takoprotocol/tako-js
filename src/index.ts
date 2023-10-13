@@ -1,6 +1,4 @@
-async function getTakoInfo() {
-    const res = await fetch("https://api.takoyaki.so/v2/takohub_info");
-    const data = await res.json();
-    return data.data;
-}
-export { getTakoInfo }
+import * as CONSTANT from './constant';
+import { Tako } from './libs';
+
+export { CONSTANT, Tako }
