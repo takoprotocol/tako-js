@@ -4,7 +4,6 @@ const tako = new Tako(CONSTANT.Network.TESTNET);
 //import * as tt from '../build/src';
 (async () => {
     try {
-
     } catch (error) {
         console.log(`error:${error}`);
     }
