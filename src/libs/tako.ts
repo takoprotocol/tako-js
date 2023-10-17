@@ -50,8 +50,9 @@ class Tako {
         return await get(url);
     }
     public async isHashConfirmed(hashes: string[]) {
+        const _hashes = ([] as string[]).concat(hashes)
         const url = `${this._url}${Api_General.IsHashConfirmed}`;
-        const reqBody = { "hashes": hashes };
+        const reqBody = { "hashes": _hashes };
         return await post(url, reqBody);
     }
 
