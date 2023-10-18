@@ -3,7 +3,7 @@ const tako = new Tako(CONSTANT.Network.LOCALHOST);
 const ecosystem = tako.lens;
 (async () => {
     try {
-        bidsCreated();
+        passedBids();
     } catch (error) {
         console.log(`error:${error}`);
     }
@@ -30,7 +30,7 @@ async function bidsReceivedStats() {
     console.log(JSON.stringify(res));
 }
 async function bidsCreatedStats() {
-    const res = await ecosystem.bidsCreatedStats([35354], []);
+    const res = await ecosystem.bidsCreatedStats.ids([35354]).addresses(["0x793eC059cCc2Ceeb8c6748111550b23c4e0072Bb"]).get();
     console.log(JSON.stringify(res));
 }
 async function bidsConfirmingReceived() {
@@ -39,11 +39,32 @@ async function bidsConfirmingReceived() {
 }
 async function bidsCreated() {
     const ids = [34550];
-    const addresses = ["0xFA48EeEA28cE611AcA901aa6F9C3B7fa8085Db2a"];
-    const bidTypes = ["QuotedPublication", "Post"];
+    const addresses = ["0x793eC059cCc2Ceeb8c6748111550b23c4e0072Bb"];
+    const bidTypes = ["QuotedPublication", "Post", "Mirror"];
     //addresses(addresses). bidType(bidTypes).
-    const a = ecosystem.bidsCreated.ids(ids).bidType(bidTypes).
-        limit(3).offset(0).DESC.state("Pass");
-    const res = await a.find();
+    const a = ecosystem.bidsCreated.ids(ids).bidType(bidTypes).addresses(addresses).
+        limit(3).offset(0).DESC.state("Pending");
+    const res = await a.get();
+    console.log(JSON.stringify(res));
+}
+async function bidsIgnored() {
+    const ids = [34370];
+    const bidTypes = ["Mirror", "Post"];
+    const a = ecosystem.bidsIgnored.ids(ids).bidType(bidTypes).
+        limit(3).offset(0).DESC.sort("bid_amount");
+    const res = await a.get();
+    console.log(JSON.stringify(res));
+}
+async function bidsReceived() {
+    const ids = [34370];
+    const bidTypes = ["Mirror", "Post", "Comment"];
+    const a = ecosystem.bidsReceived.ids(ids).bidType(bidTypes).
+        limit(3).offset(0).DESC.sort("bid_amount").includeIgnore(false).state("Pending");
+    const res = await a.get();
+    console.log(JSON.stringify(res));
+}
+async function passedBids() {
+    const a = ecosystem.passedBids.limit(0).offset(0);
+    const res = await a.get();
     console.log(JSON.stringify(res));
 }

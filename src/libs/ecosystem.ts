@@ -1,6 +1,7 @@
 import * as CONSTANT from '../constant';
 import { get, post } from '../utils/utils';
 import * as querystring from 'querystring';
+import { GetBids } from './get_bids';
 
 class EcosystemBasic {
     private _network: CONSTANT.Network;
@@ -61,91 +62,53 @@ class EcosystemBasic {
         const url = `${this._url}${this._ecosystem}/${Apis.CuratorAccepted}${params}`;
         return await get(url);
     }
-    public async bidsCreatedStats(ids: number[], addresses: string[]) {
-        if (ids.length != 0 || addresses.length != 0) {
-            const url = `${this._url}${this._ecosystem}/${Apis.BidsCreatedStats}`;
-            const reqBody = { addresses: ([] as string[]).concat(addresses) };
-            reqBody[this._idsKeyName] = ([] as number[]).concat(ids);
-            return await post(url, reqBody);
-        }
-        return {}
+    public get bidsCreatedStats(): BidsCreatedStats {
+        return new BidsCreatedStats(this._url, this._ecosystem, this._idsKeyName);
     }
     public get bidsCreated(): BidsCreated {
         return new BidsCreated(this._url, this._ecosystem, this._idsKeyName);
     }
 }
-class BidsCreated {
-    private _limit: number = 10;
-    private _offset: number = 0;
-    private _ids: number[] = [];
+class BidsCreated extends GetBids {
     private _addresses: string[] = [];
-    private _url: string;
-    private _ecosystem: string;
-    private _idsKeyName: string;
-    private _sortType: string = "desc";
-    private _sort: string = "bid_amount";
     private _state: string = "";
-    private _bidType: string[] = [];
-    constructor(url: string, ecosystem: string, idsKeyName: string) {
-        this._url = url;
-        this._ecosystem = ecosystem;
-        this._idsKeyName = idsKeyName;
-    }
 
-    public limit(limit: number): BidsCreated {
-        this._limit = limit;
-        return this;
+    constructor(url: string, ecosystem: string, idsKeyName: string) {
+        super(url, ecosystem, idsKeyName, Apis.BidsCreated);
     }
-    public offset(offset: number): BidsCreated {
-        this._offset = offset;
-        return this;
+    protected requestBody(): object {
+        return {
+            addresses: this._addresses,
+            state: this._state
+        };
     }
-    public get DESC(): BidsCreated {
-        this._sortType = "desc";
-        return this;
-    }
-    public get ASC(): BidsCreated {
-        this._sortType = "asc";
-        return this;
-    }
-    public addresses(addresses: string[]): BidsCreated {
+    public addresses(addresses: string[]) {
         this._addresses = ([] as string[]).concat(addresses);
+        this._ids = [];
         return this;
     }
-    public ids(ids: number[]): BidsCreated {
-        this._ids = ([] as number[]).concat(ids);
-        return this;
-    }
-    public sort(sort: string): BidsCreated {
-        this._sort = sort;
-        return this;
-    }
-    public state(state: string): BidsCreated {
+    public state(state: string) {
         this._state = state;
         return this;
     }
-    public bidType(bidType: string[]): BidsCreated {
-        this._bidType = ([] as string[]).concat(bidType);
+}
+class BidsCreatedStats extends GetBids {
+    private _addresses: string[] = [];
+    constructor(url: string, ecosystem: string, idsKeyName: string) {
+        super(url, ecosystem, idsKeyName, Apis.BidsCreatedStats);
+    }
+    protected requestBody(): object {
+        return {
+            addresses: this._addresses,
+        };
+    }
+    public addresses(addresses: string[]) {
+        this._addresses = ([] as string[]).concat(addresses);
+        this._ids = [];
         return this;
     }
-    public async find() {
-        if (this._ids.length != 0 || this._addresses.length != 0) {
-            const url = `${this._url}${this._ecosystem}/${Apis.BidsCreated}`;
-            const reqBody = {
-                addresses: this._addresses, bidType: this._bidType,
-                limit: this._limit, offset: this._offset,
-                sort: this._sort, sortType: this._sortType,
-                state: this._state
-            };
-            reqBody[this._idsKeyName] = this._ids;
-            return await post(url, reqBody);
-        }
-        return {}
-    }
-    public async stats() {
-
-    }
 }
+
 enum Apis {
     IndexPairs = 'id_index/pairs',
     RecentCurators = 'recent/curators',

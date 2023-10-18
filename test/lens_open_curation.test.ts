@@ -3,7 +3,9 @@ const tako = new Tako(CONSTANT.Network.LOCALHOST);
 const ecosystem = tako.lensOpenCuration;
 (async () => {
     try {
-        bidsCreated();
+        register().catch(error => {
+            console.log(`error:${error}`);
+        });
     } catch (error) {
         console.log(`error:${error}`);
     }
@@ -26,7 +28,7 @@ async function curatorAccepted() {
     console.log(JSON.stringify(res));
 }
 async function bidsCreatedStats() {
-    const res = await ecosystem.bidsCreatedStats([], ["0xCe41cdCCA1849CaD58DaACc6005B1990Be04e1F0"]);
+    const res = await ecosystem.bidsCreatedStats.addresses(["0xCe41cdCCA1849CaD58DaACc6005B1990Be04e1F0"]).get();
     console.log(JSON.stringify(res));
 }
 async function bidsCreated() {
@@ -37,6 +39,15 @@ async function bidsCreated() {
     //addresses(addresses). bidType(bidTypes).
     const a = ecosystem.bidsCreated.addresses(addresses).bidType(bidTypes).
         limit(10).offset(0).sort("id").DESC.state("Pass");
-    const res = await a.find();
+    const res = await a.get();
+    console.log(JSON.stringify(res));
+}
+async function passedBids() {
+    const a = ecosystem.passedBids.limit(0).offset(0);
+    const res = await a.get();
+    console.log(JSON.stringify(res));
+}
+async function register() {
+    const res = await ecosystem.register(1, "0x923d-0x01");
     console.log(JSON.stringify(res));
 }

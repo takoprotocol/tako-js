@@ -1,5 +1,6 @@
 import { EcosystemBasic } from './ecosystem';
 import { get, post } from '../utils/utils';
+import { GetBids } from './get_bids';
 
 class EcosystemP2p extends EcosystemBasic {
     public async bidsReceivedStats(ids: number[], includeIgnore: boolean) {
@@ -20,9 +21,49 @@ class EcosystemP2p extends EcosystemBasic {
         }
         return {}
     }
+    public get bidsIgnored(): BidsIgnored {
+        return new BidsIgnored(this.url, this.ecosystem, this._idsKeyName);
+    }
+    public get bidsReceived(): BidsReceived {
+        return new BidsReceived(this.url, this.ecosystem, this._idsKeyName);
+    }
+    public async ignoreBid(body: object) {
+
+    }
 }
+class BidsIgnored extends GetBids {
+    constructor(url: string, ecosystem: string, idsKeyName: string) {
+        super(url, ecosystem, idsKeyName, Apis.BidsIgnored);
+    }
+}
+class BidsReceived extends GetBids {
+    private _includeIgnore: boolean = false;
+    private _state: string = "";
+
+    constructor(url: string, ecosystem: string, idsKeyName: string) {
+        super(url, ecosystem, idsKeyName, Apis.BidsReceived);
+    }
+    protected requestBody(): object {
+        return {
+            includeIgnore: this._includeIgnore,
+            state: this._state
+        };
+    }
+
+    public state(state: string) {
+        this._state = state;
+        return this;
+    }
+    public includeIgnore(includeIgnore: boolean) {
+        this._includeIgnore = includeIgnore;
+        return this;
+    }
+}
+
 enum Apis {
     BidsReceivedStats = 'get_bids_received/stats',
     BidsConfirmingReceived = 'get_bids_confirming_received',
+    BidsIgnored = 'get_bids_ignored',
+    BidsReceived = 'get_bids_received',
 }
 export { EcosystemP2p }

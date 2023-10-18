@@ -1,9 +1,12 @@
 import { CONSTANT, Tako } from '../src';
+import { get, post } from '../src/utils/utils';
+
 const tako = new Tako(CONSTANT.Network.LOCALHOST);
 const ecosystem = tako.farcaster;
 (async () => {
     try {
-        bidsCreated();
+        //bidsCreated();
+        bidsReceived();
     } catch (error) {
         console.log(`error:${error}`);
     }
@@ -31,7 +34,7 @@ async function bidsReceivedStats() {
     console.log(JSON.stringify(res));
 }
 async function bidsCreatedStats() {
-    const res = await ecosystem.bidsCreatedStats([], ["0xAA781B0e73c44E64a662CF1891a2A45176cD7932"]);
+    const res = await ecosystem.bidsCreatedStats.addresses(["0xAA781B0e73c44E64a662CF1891a2A45176cD7932"]).get();
     console.log(JSON.stringify(res));
 }
 async function bidsConfirmingReceived() {
@@ -47,6 +50,22 @@ async function bidsCreated() {
     //addresses(addresses). bidType(bidTypes).
     const a = ecosystem.bidsCreated.addresses(addresses).bidType(bidTypes).
         limit(10).offset(0).sort("bid_expires").DESC.state("Cancel");
-    const res = await a.find();
+    const res = await a.get();
+    console.log(JSON.stringify(res));
+}
+async function bidsIgnored() {
+    const ids = [11588];
+    const bidTypes = ["Cast"];
+    const a = ecosystem.bidsIgnored.ids(ids).bidType(bidTypes).
+        limit(3).offset(0).DESC.sort("bid_amount");
+    const res = await a.get();
+    console.log(JSON.stringify(res));
+}
+async function bidsReceived() {
+    const ids = [11588];
+    const bidTypes = ["Cast", "Reply", "Recast"];
+    const a = ecosystem.bidsReceived.ids(ids).bidType(bidTypes).
+        limit(3).offset(0).DESC.sort("bid_amount").includeIgnore(false).state("Pending");
+    const res = await a.get();
     console.log(JSON.stringify(res));
 }
