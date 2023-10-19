@@ -1,13 +1,17 @@
 
+import { setTimeout } from 'timers';
 import { CONSTANT, Tako } from '../src';
-const tako = new Tako(CONSTANT.Network.TESTNET);
+const tako = new Tako(CONSTANT.Network.LOCALHOST);
 import * as ethers from 'ethers';
 const phrase = "";
 const privateKey = "0xaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbb";//0xa68706Cd6607e0B8b86016971d72F85a60E8B7Ec
 
 (async () => {
     try {
-        refreshToken();
+
+        await sendBidCreateNotification().catch(err => {
+            console.log(`error:${err}`);
+        });
         //generateMessage();
     } catch (error) {
         console.log(`error:${error}`);
@@ -39,11 +43,28 @@ async function getToken() {
     const signature = await tako.personalSignWithPrivateKey(privateKey, message);
     //const signature = await tako.personalSignWithPhrase(phrase, `m/44'/60'/0'/0/0`, message);
     const res = await tako.getToken(message, signature);
-    console.log(JSON.stringify(res));
+    console.log(`get token:${JSON.stringify(res)}`);
+    printToken();
     return res;
 }
+function printToken() {
+    tako.lens.printToken();
+    tako.farcaster.printToken();
+    tako.lensOpenCuration.printToken();
+}
 async function refreshToken() {
-    const res = await getToken();
-    const refreshRes = await tako.refreshToken(res["refresh_token"]);
-    console.log(JSON.stringify(refreshRes));
+    await getToken();
+    setTimeout(async () => {
+        const refreshRes = await tako.refreshToken();
+        console.log(`refreshToken:${JSON.stringify(refreshRes)}`);
+        printToken();
+    }, 3000)
+}
+async function sendBidCreateNotification() {
+    await getToken();
+    const txHash = "0xf47abea9ece2bab1197fdd4cbaba5a54344686091aec0be353fd6cb5d293ba47";
+    //const txHash = "abc";
+    const res = await tako.sendBidCreateNotification(txHash);
+    console.log(res);
+
 }

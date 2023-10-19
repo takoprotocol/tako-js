@@ -1,9 +1,14 @@
 import { CONSTANT, Tako } from '../src';
+import * as ethers from 'ethers';
 const tako = new Tako(CONSTANT.Network.LOCALHOST);
 const ecosystem = tako.lens;
+const privateKey = "0xaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbb";//0xa68706Cd6607e0B8b86016971d72F85a60E8B7Ec
+
 (async () => {
     try {
-        passedBids();
+        verifyBid().catch(error => {
+            console.log(`error:${error}`);
+        });
     } catch (error) {
         console.log(`error:${error}`);
     }
@@ -66,5 +71,23 @@ async function bidsReceived() {
 async function passedBids() {
     const a = ecosystem.passedBids.limit(0).offset(0);
     const res = await a.get();
+    console.log(JSON.stringify(res));
+}
+async function getToken() {
+    const wallet = new ethers.Wallet(privateKey);
+    const message = tako.generateTokenMessage(wallet.address);
+    const signature = await tako.personalSignWithPrivateKey(privateKey, message);
+    //const signature = await tako.personalSignWithPhrase(phrase, `m/44'/60'/0'/0/0`, message);
+    const res = await tako.getToken(message, signature);
+    console.log(`get token:${JSON.stringify(res)}`);
+    return res;
+}
+async function ignoreBid() {
+    await getToken();
+    const res = await ecosystem.ignoreBid(false, 3, "polygon");//, [34370]
+    console.log(JSON.stringify(res));
+}
+async function verifyBid() {
+    const res = await ecosystem.verifyBid("0xAA781B0e73c44E64a662CF1891a2A45176cD7932", 1, "0x01-0x01");//, [34370]
     console.log(JSON.stringify(res));
 }

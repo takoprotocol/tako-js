@@ -1,9 +1,11 @@
 import * as CONSTANT from '../constant';
 import * as ethers from 'ethers';
-import { get, post } from '../utils/utils';
+import { get, post, postWithToken } from '../utils/utils';
 import { Lens } from './lens';
 import { LensOpenCuration } from './lens_open_curation';
 import { Farcaster } from './farcaster';
+import { EcosystemBasic } from './ecosystem';
+import { Token } from './ecosystem';
 
 enum Apis {
     TakohubInfo = 'takohub_info',
@@ -11,6 +13,7 @@ enum Apis {
     IsHashConfirmed = 'hashes/confirmed',
     GetToken = 'token',
     RefreshToken = 'refresh_token',
+    SendBidCreateNotification = 'notification/bid_create',
 }
 
 class Tako {
@@ -19,9 +22,11 @@ class Tako {
     private _lens: Lens;
     private _lensOpenCuration: LensOpenCuration;
     private _farcaster: Farcaster;
+    private _token: Token = new Token();
     constructor(network: CONSTANT.Network) {
         this._network = network;
         this._url = CONSTANT.getTakoUrl(network);
+        EcosystemBasic.setToken(this._token);
         this._lens = new Lens(network, this._url);
         this._lensOpenCuration = new LensOpenCuration(network, this._url);
         this._farcaster = new Farcaster(network, this._url);
@@ -30,6 +35,13 @@ class Tako {
         //2023-07-19T05:51:05.776Z Z UTC time
         const date = new Date();
         return date.toISOString();
+    }
+    private isValidTxHash(txHash: string): boolean {
+        if (txHash.length != 66) {
+            return false;
+        }
+        const reg = new RegExp("^0x[A-Fa-f0-9]{64}$");
+        return reg.test(txHash);
     }
 
     public get network(): string {
@@ -82,14 +94,41 @@ class Tako {
     }
     public async getToken(message: string, signature: string) {
         const url = `${this._url}${Apis.GetToken}`;
-        const reqBody = { "message": message, signature: signature };
-        return await post(url, reqBody);
+        const reqBody = { "message": message, "signature": signature };
+        try {
+            const res = await post(url, reqBody);
+            this._token.set(res);
+            return res;
+        } catch (error) {
+            throw error;
+        }
     }
-    public async refreshToken(refreshToken: string) {
+    public async refreshToken() {
+        if (this._token.isExpired()) {
+            throw "token expired";
+        }
         const url = `${this._url}${Apis.RefreshToken}`;
-        const reqBody = { "refresh_token": refreshToken };
-        return await post(url, reqBody);
+        const reqBody = { "refresh_token": this._token.refreshToken };
+        try {
+            const res = await post(url, reqBody);
+            this._token.set(res);
+            return res;
+        } catch (error) {
+            throw error;
+        }
+    }
+    public async sendBidCreateNotification(txHash: string) {
+        const isValidHash = this.isValidTxHash(txHash);
+        if (!isValidHash) {
+            throw "invalid transaction hash";
+        }
+        const url = `${this._url}${Apis.SendBidCreateNotification}`;
+        const reqBody = { "txHash": txHash };
+        const res = await postWithToken(url, this._token.authorizationStr, reqBody);
+        return res
     }
 }
+
+
 
 export { Tako }

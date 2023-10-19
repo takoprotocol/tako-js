@@ -3,7 +3,7 @@ const tako = new Tako(CONSTANT.Network.LOCALHOST);
 const ecosystem = tako.lensOpenCuration;
 (async () => {
     try {
-        register().catch(error => {
+        verifyBid().catch(error => {
             console.log(`error:${error}`);
         });
     } catch (error) {
@@ -49,5 +49,9 @@ async function passedBids() {
 }
 async function register() {
     const res = await ecosystem.register(1, "0x923d-0x01");
+    console.log(JSON.stringify(res));
+}
+async function verifyBid() {
+    const res = await ecosystem.verifyBid("0xAA781B0e73c44E64a662CF1891a2A45176cD7932", 1, "0x01-0x01");//, [34370]
     console.log(JSON.stringify(res));
 }

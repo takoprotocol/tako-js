@@ -2,6 +2,7 @@ import * as CONSTANT from '../constant';
 import { EcosystemOpenCuration } from './ecosystem_open_curation';
 import { get, post } from '../utils/utils';
 import { PassedBids } from './get_bids';
+
 enum Api_Lens_Open_Curation {
     PassedBids = 'passed_bids',
 }
@@ -13,6 +14,16 @@ class LensOpenCuration extends EcosystemOpenCuration {
     }
     public get passedBids(): PassedBids {
         return new PassedBids(this.url, this.ecosystem, Api_Lens_Open_Curation.PassedBids);
+    }
+    public async verifyBid(address: string, index: number, pubId: string) {
+        if (index == 0) {
+            throw "invalid index";
+        }
+        if (pubId == "") {
+            throw "invalid pubId";
+        }
+        const body = { address: address, index: index, pubId: pubId };
+        return await this.verifyBidBasic(body);
     }
 }
 

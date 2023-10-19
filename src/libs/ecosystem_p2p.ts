@@ -1,5 +1,5 @@
 import { EcosystemBasic } from './ecosystem';
-import { get, post } from '../utils/utils';
+import { get, post, postWithToken } from '../utils/utils';
 import { GetBids } from './get_bids';
 
 class EcosystemP2p extends EcosystemBasic {
@@ -27,8 +27,13 @@ class EcosystemP2p extends EcosystemBasic {
     public get bidsReceived(): BidsReceived {
         return new BidsReceived(this.url, this.ecosystem, this._idsKeyName);
     }
-    public async ignoreBid(body: object) {
-
+    protected async ignoreBidP2p(reqBody: object) {
+        const token = this.getToken();//check token
+        if (token.isExpired()) {
+            throw "token expired, please get a token first";
+        }
+        const url = `${this.url}${this.ecosystem}/${Apis.IgnoreBid}`;
+        return await postWithToken(url, this.getToken().authorizationStr, reqBody);
     }
 }
 class BidsIgnored extends GetBids {
@@ -65,5 +70,6 @@ enum Apis {
     BidsConfirmingReceived = 'get_bids_confirming_received',
     BidsIgnored = 'get_bids_ignored',
     BidsReceived = 'get_bids_received',
+    IgnoreBid = 'ignore_bid',
 }
 export { EcosystemP2p }
