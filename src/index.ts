@@ -1,4 +1,4 @@
 import * as CONSTANT from './constant';
-import { Tako } from './libs';
+import { TakoV2 } from './v2';
 
-export { CONSTANT, Tako }
+export { CONSTANT, TakoV2 }

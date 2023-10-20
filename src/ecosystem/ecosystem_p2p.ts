@@ -1,14 +1,18 @@
 import { EcosystemBasic } from './ecosystem';
-import { get, post, postWithToken } from '../utils/utils';
-import { GetBids } from './get_bids';
+import * as CONSTANT from '../constant';
+import { utils } from '../utils';
+import { GetBids } from '../libs';
 
 class EcosystemP2p extends EcosystemBasic {
+    constructor(network: CONSTANT.Network, url: string, ecosystem: string, idsKeyName: string, idKeyName: string) {
+        super(network, url, ecosystem, idsKeyName, idKeyName);
+    }
     public async bidsReceivedStats(ids: number[], includeIgnore: boolean) {
         if (ids.length != 0) {
             const url = `${this.url}${this.ecosystem}/${Apis.BidsReceivedStats}`;
             const reqBody = { includeIgnore: includeIgnore };
             reqBody[this._idsKeyName] = ids;
-            return await post(url, reqBody);
+            return await utils.post(url, reqBody);
         }
         return {}
     }
@@ -17,7 +21,7 @@ class EcosystemP2p extends EcosystemBasic {
             const url = `${this.url}${this.ecosystem}/${Apis.BidsConfirmingReceived}`;
             const reqBody = {};
             reqBody[this._idsKeyName] = ids;
-            return await post(url, reqBody);
+            return await utils.post(url, reqBody);
         }
         return {}
     }
@@ -33,7 +37,7 @@ class EcosystemP2p extends EcosystemBasic {
             throw "token expired, please get a token first";
         }
         const url = `${this.url}${this.ecosystem}/${Apis.IgnoreBid}`;
-        return await postWithToken(url, this.getToken().authorizationStr, reqBody);
+        return await utils.postWithToken(url, this.getToken().authorizationStr, reqBody);
     }
 }
 class BidsIgnored extends GetBids {

@@ -1,6 +1,7 @@
 import * as CONSTANT from '../constant';
-import { EcosystemP2p } from './ecosystem_p2p';
-import { PassedBids } from './get_bids';
+import { env } from '../utils';
+import { EcosystemP2p } from '../ecosystem';
+import { PassedBids } from '../libs';
 enum Api_Lens {
     PassedBids = 'passed_bids',
 }
@@ -8,9 +9,7 @@ enum Api_Lens {
 class Lens extends EcosystemP2p {
 
     constructor(network: CONSTANT.Network, url: string) {
-        super(network, url, "lens");
-        this._idsKeyName = "profileIds";
-        this._idKeyName = "profileId";
+        super(network, url, env.Ecosystem.LENS, "profileIds", "profileId");
     }
     public get passedBids(): PassedBids {
         return new PassedBids(this.url, this.ecosystem, Api_Lens.PassedBids);

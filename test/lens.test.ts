@@ -1,12 +1,12 @@
-import { CONSTANT, Tako } from '../src';
+import { CONSTANT, TakoV2 } from '../src';
 import * as ethers from 'ethers';
-const tako = new Tako(CONSTANT.Network.LOCALHOST);
+const tako = new TakoV2(CONSTANT.Network.LOCALHOST);
 const ecosystem = tako.lens;
 const privateKey = "0xaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbb";//0xa68706Cd6607e0B8b86016971d72F85a60E8B7Ec
 
 (async () => {
     try {
-        verifyBid().catch(error => {
+        await passedBids().catch(error => {
             console.log(`error:${error}`);
         });
     } catch (error) {
@@ -48,9 +48,13 @@ async function bidsCreated() {
     const bidTypes = ["QuotedPublication", "Post", "Mirror"];
     //addresses(addresses). bidType(bidTypes).
     const a = ecosystem.bidsCreated.ids(ids).bidType(bidTypes).addresses(addresses).
-        limit(3).offset(0).DESC.state("Pending");
+        limit(3).offset(0).DESC//.state("Pending");
     const res = await a.get();
     console.log(JSON.stringify(res));
+    const b = ecosystem.bidsCreated.ids(ids).bidType(bidTypes).addresses(addresses).
+        limit(3).offset(0).DESC.state("Pending");
+    const resb = await b.get();
+    console.log(JSON.stringify(resb));
 }
 async function bidsIgnored() {
     const ids = [34370];

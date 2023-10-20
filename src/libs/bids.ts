@@ -1,4 +1,4 @@
-import { get, post } from '../utils/utils';
+import { utils } from '../utils';
 import * as querystring from 'querystring';
 
 class GetBids {
@@ -60,7 +60,7 @@ class GetBids {
         reqBody["sort"] = this._sort;
         reqBody["sortType"] = this._sortType;
         reqBody[this._idsKeyName] = this._ids;
-        return await post(url, reqBody);
+        return await utils.post(url, reqBody);
     }
 }
 class PassedBids {
@@ -84,7 +84,7 @@ class PassedBids {
         return this;
     }
     public async get() {
-        const url = `${this._url}${this._ecosystem}/${this._path}a`;
+        const url = `${this._url}${this._ecosystem}/${this._path}`;
         const data = {};
         data["limit"] = this._limit;
         data["offset"] = this._offset;
@@ -92,7 +92,7 @@ class PassedBids {
         if (params != "") {
             params = "?" + params;
         }
-        return await get(url);
+        return await utils.get(url);
     }
 }
 export { GetBids, PassedBids }

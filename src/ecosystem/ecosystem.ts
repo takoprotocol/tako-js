@@ -1,7 +1,7 @@
 import * as CONSTANT from '../constant';
-import { get, post } from '../utils/utils';
+import { utils } from '../utils';
 import * as querystring from 'querystring';
-import { GetBids } from './get_bids';
+import { GetBids, Token } from '../libs';
 import * as ethers from 'ethers';
 
 class EcosystemBasic {
@@ -17,10 +17,12 @@ class EcosystemBasic {
     public getToken(): Token {
         return EcosystemBasic._token;
     }
-    constructor(network: CONSTANT.Network, url: string, ecosystem: string) {
+    constructor(network: CONSTANT.Network, url: string, ecosystem: string, idsKeyName: string, idKeyName: string) {
         this._network = network;
         this._url = url;
         this._ecosystem = ecosystem;
+        this._idsKeyName = idsKeyName;
+        this._idKeyName = idKeyName;
     }
     private async fetchByIds(ids: number[], key: string, path: string) {
         const _ids = ([] as number[]).concat(ids);
@@ -28,7 +30,7 @@ class EcosystemBasic {
             const url = `${this._url}${this._ecosystem}/${path}`;
             const reqBody = {};
             reqBody[key] = _ids;
-            return await post(url, reqBody);
+            return await utils.post(url, reqBody);
         }
         return {}
     }
@@ -54,7 +56,7 @@ class EcosystemBasic {
     }
     public async recentCurators() {
         const url = `${this._url}${this._ecosystem}/${Apis.RecentCurators}`;
-        return await get(url);
+        return await utils.get(url);
     }
     public async curatorAccepted(id: number | undefined, cursor: number | undefined) {
         const data = {};
@@ -69,7 +71,7 @@ class EcosystemBasic {
             params = "?" + params;
         }
         const url = `${this._url}${this._ecosystem}/${Apis.CuratorAccepted}${params}`;
-        return await get(url);
+        return await utils.get(url);
     }
     public get bidsCreatedStats(): BidsCreatedStats {
         return new BidsCreatedStats(this._url, this._ecosystem, this._idsKeyName);
@@ -86,7 +88,7 @@ class EcosystemBasic {
             throw "invalid address";
         }
         const url = `${this.url}${this.ecosystem}/${Apis.VerifyBid}`;
-        return await post(url, reqBody);
+        return await utils.post(url, reqBody);
     }
 }
 class BidsCreated extends GetBids {
@@ -128,36 +130,7 @@ class BidsCreatedStats extends GetBids {
         return this;
     }
 }
-class Token {
-    private _type: string = "";
-    private _token: string = "";
-    private _refreshToken: string = "";
-    private _expire: number = 0;//Math.floor(Date.now() / 1000)
-    public set(data: any) {
-        this._token = data.token;
-        this._type = data.token_type;
-        this._refreshToken = data.refresh_token;
-        this._expire = Math.floor(Date.now() / 1000) + data.expires_in;
-    }
-    public get refreshToken(): string {
-        return this._refreshToken;
-    }
-    public get type(): string {
-        return this._type;
-    }
-    public get token(): string {
-        return this._token;
-    }
-    public get expire(): number {
-        return this._expire;
-    }
-    public get authorizationStr(): string {
-        return `${this._type}:${this._token}`;
-    }
-    public isExpired(): boolean {
-        return Math.floor(Date.now() / 1000) >= this.expire;
-    }
-}
+
 enum Apis {
     IndexPairs = 'id_index/pairs',
     RecentCurators = 'recent/curators',
@@ -167,4 +140,4 @@ enum Apis {
     BidsCreated = 'get_bids_created',
     VerifyBid = 'verify_bid',
 }
-export { EcosystemBasic, Token }
+export { EcosystemBasic }

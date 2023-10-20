@@ -1,11 +1,11 @@
-import * as CONSTANT from '../constant';
+import { Network } from '../constant';
+import { env, utils } from '../utils';
 import * as ethers from 'ethers';
-import { get, post, postWithToken } from '../utils/utils';
 import { Lens } from './lens';
 import { LensOpenCuration } from './lens_open_curation';
 import { Farcaster } from './farcaster';
-import { EcosystemBasic } from './ecosystem';
-import { Token } from './ecosystem';
+import { EcosystemBasic } from '../ecosystem';
+import { Token } from '../libs';
 
 enum Apis {
     TakohubInfo = 'takohub_info',
@@ -16,16 +16,16 @@ enum Apis {
     SendBidCreateNotification = 'notification/bid_create',
 }
 
-class Tako {
-    private _network: CONSTANT.Network;
+class TakoV2 {
+    private _network: Network;
     private _url: string;
     private _lens: Lens;
     private _lensOpenCuration: LensOpenCuration;
     private _farcaster: Farcaster;
     private _token: Token = new Token();
-    constructor(network: CONSTANT.Network) {
+    constructor(network: Network) {
         this._network = network;
-        this._url = CONSTANT.getTakoUrl(network);
+        this._url = env.getTakoUrl(network);
         EcosystemBasic.setToken(this._token);
         this._lens = new Lens(network, this._url);
         this._lensOpenCuration = new LensOpenCuration(network, this._url);
@@ -60,20 +60,20 @@ class Tako {
 
     public async takoInfo() {
         const url = `${this._url}${Apis.TakohubInfo}`;
-        return await get(url);
+        return await utils.get(url);
     }
     public async whitelistInfo(address: string) {
         if (!ethers.isAddress(address)) {
             throw "invalid address";
         }
         const url = `${this._url}${Apis.WhitelistInfo}/${address}`;
-        return await get(url);
+        return await utils.get(url);
     }
     public async isHashConfirmed(hashes: string[]) {
         const _hashes = ([] as string[]).concat(hashes)
         const url = `${this._url}${Apis.IsHashConfirmed}`;
         const reqBody = { "hashes": _hashes };
-        return await post(url, reqBody);
+        return await utils.post(url, reqBody);
     }
     public generateTokenMessage(address: string) {
         if (!ethers.isAddress(address)) {
@@ -96,7 +96,7 @@ class Tako {
         const url = `${this._url}${Apis.GetToken}`;
         const reqBody = { "message": message, "signature": signature };
         try {
-            const res = await post(url, reqBody);
+            const res = await utils.post(url, reqBody);
             this._token.set(res);
             return res;
         } catch (error) {
@@ -108,9 +108,9 @@ class Tako {
             throw "token expired";
         }
         const url = `${this._url}${Apis.RefreshToken}`;
-        const reqBody = { "refresh_token": this._token.refreshToken };
+        const reqBody = { "refresh_token": this._token.refreshToken + 'ad' };
         try {
-            const res = await post(url, reqBody);
+            const res = await utils.post(url, reqBody);
             this._token.set(res);
             return res;
         } catch (error) {
@@ -124,11 +124,11 @@ class Tako {
         }
         const url = `${this._url}${Apis.SendBidCreateNotification}`;
         const reqBody = { "txHash": txHash };
-        const res = await postWithToken(url, this._token.authorizationStr, reqBody);
+        const res = await utils.postWithToken(url, this._token.authorizationStr, reqBody);
         return res
     }
 }
 
 
 
-export { Tako }
+export { TakoV2 }

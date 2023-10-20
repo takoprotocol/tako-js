@@ -1,3 +1,3 @@
-import { Tako } from './tako';
-
-export { Tako }
+import { GetBids, PassedBids } from './bids';
+import { Token } from './token';
+export { GetBids, PassedBids, Token }

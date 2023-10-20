@@ -1,9 +1,9 @@
-import { CONSTANT, Tako } from '../src';
-const tako = new Tako(CONSTANT.Network.LOCALHOST);
+import { CONSTANT, TakoV2 } from '../src';
+const tako = new TakoV2(CONSTANT.Network.LOCALHOST);
 const ecosystem = tako.lensOpenCuration;
 (async () => {
     try {
-        verifyBid().catch(error => {
+        indexPairs().catch(error => {
             console.log(`error:${error}`);
         });
     } catch (error) {

@@ -1,8 +1,8 @@
-import { CONSTANT, Tako } from '../src';
+import { CONSTANT, TakoV2 } from '../src';
 import { get, post } from '../src/utils/utils';
 import * as ethers from 'ethers';
 const privateKey = "0xaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbb";//0xa68706Cd6607e0B8b86016971d72F85a60E8B7Ec
-const tako = new Tako(CONSTANT.Network.LOCALHOST);
+const tako = new TakoV2(CONSTANT.Network.LOCALHOST);
 const ecosystem = tako.farcaster;
 (async () => {
     try {

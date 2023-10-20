@@ -1,14 +1,12 @@
 import * as CONSTANT from '../constant';
-import { get, post } from '../utils/utils';
-import { EcosystemP2p } from './ecosystem_p2p';
+import { env } from '../utils';
+import { EcosystemP2p } from '../ecosystem';
 enum Api_Farcaster {
 
 }
 class Farcaster extends EcosystemP2p {
     constructor(network: CONSTANT.Network, url: string) {
-        super(network, url, "farcaster");
-        this._idsKeyName = "fids";
-        this._idKeyName = "fid";
+        super(network, url, env.Ecosystem.FARCASTER, "fids", "fid");
     }
     public async ignoreBid(ignore: boolean, index: number, ids?: number[]) {
         const body = { ignore: ignore, index: index };

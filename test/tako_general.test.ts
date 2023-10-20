@@ -1,7 +1,8 @@
-
 import { setTimeout } from 'timers';
-import { CONSTANT, Tako } from '../src';
-const tako = new Tako(CONSTANT.Network.LOCALHOST);
+import { CONSTANT, TakoV2 } from '../src';
+//import { CONSTANT, TakoV2 } from '../build/src';
+
+const tako = new TakoV2(CONSTANT.Network.LOCALHOST);
 import * as ethers from 'ethers';
 const phrase = "";
 const privateKey = "0xaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbb";//0xa68706Cd6607e0B8b86016971d72F85a60E8B7Ec
@@ -9,7 +10,7 @@ const privateKey = "0xaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaa
 (async () => {
     try {
 
-        await sendBidCreateNotification().catch(err => {
+        await refreshToken().catch(err => {
             console.log(`error:${err}`);
         });
         //generateMessage();
@@ -44,7 +45,7 @@ async function getToken() {
     //const signature = await tako.personalSignWithPhrase(phrase, `m/44'/60'/0'/0/0`, message);
     const res = await tako.getToken(message, signature);
     console.log(`get token:${JSON.stringify(res)}`);
-    printToken();
+    //printToken();
     return res;
 }
 function printToken() {
@@ -57,7 +58,7 @@ async function refreshToken() {
     setTimeout(async () => {
         const refreshRes = await tako.refreshToken();
         console.log(`refreshToken:${JSON.stringify(refreshRes)}`);
-        printToken();
+        //printToken();
     }, 3000)
 }
 async function sendBidCreateNotification() {
