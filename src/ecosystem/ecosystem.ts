@@ -1,6 +1,5 @@
 import * as CONSTANT from '../constant';
 import { utils } from '../utils';
-import * as querystring from 'querystring';
 import { GetBids, Token } from '../libs';
 import * as ethers from 'ethers';
 
@@ -66,7 +65,8 @@ class EcosystemBasic {
         if (cursor != undefined) {
             data['cursor'] = cursor;
         }
-        let params = querystring.stringify(data);
+
+        let params = new URLSearchParams(data).toString();
         if (params != "") {
             params = "?" + params;
         }

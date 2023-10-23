@@ -108,7 +108,7 @@ class TakoV2 {
             throw "token expired";
         }
         const url = `${this._url}${Apis.RefreshToken}`;
-        const reqBody = { "refresh_token": this._token.refreshToken + 'ad' };
+        const reqBody = { "refresh_token": this._token.refreshToken };
         try {
             const res = await utils.post(url, reqBody);
             this._token.set(res);
@@ -126,6 +126,13 @@ class TakoV2 {
         const reqBody = { "txHash": txHash };
         const res = await utils.postWithToken(url, this._token.authorizationStr, reqBody);
         return res
+    }
+    public async test(address: string) {
+        if (!ethers.isAddress(address)) {
+            throw "invalid address";
+        }
+        const url = `${this._url}${Apis.WhitelistInfo}/${address}`;
+        return await utils.get(url);
     }
 }
 

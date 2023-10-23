@@ -1,26 +1,35 @@
+import axios, { AxiosResponse } from 'axios';
+
 async function post(url: string, reqBody: object) {
-    const option = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(reqBody)
-    }
-    return await httpRequest(url, option);
+    return await postRequest(url, "", reqBody);
 }
 async function postWithToken(url: string, token: string, reqBody: object) {
-    const option = {
-        method: 'POST',
+    return await postRequest(url, token, reqBody);
+}
+async function postRequest(url: string, token: string, reqBody: object) {
+    const res = await axios({
+        method: 'post',
+        url: url,
+        data: reqBody,
         headers: {
             'Content-Type': 'application/json',
             'Authorization': token
-        },
-        body: JSON.stringify(reqBody)
-    }
-    return await httpRequest(url, option);
+        }
+    });
+    return dealWithResponse(res);
 }
 async function get(url: string) {
-    return await httpRequest(url, {});
+    const res = await axios.get(url);
+    return dealWithResponse(res);
+    //return await httpRequest(url, {});
+}
+function dealWithResponse(res: AxiosResponse) {
+    const data = res.data;
+    if (data.data) {
+        return data.data;
+    } else if (data.error_msg) {
+        throw data.error_msg;
+    }
 }
 async function httpRequest(url: string, option: object) {
     const res = await fetch(url, option);

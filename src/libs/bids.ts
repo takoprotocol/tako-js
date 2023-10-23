@@ -1,5 +1,4 @@
 import { utils } from '../utils';
-import * as querystring from 'querystring';
 
 class GetBids {
     protected _url: string;
@@ -84,14 +83,14 @@ class PassedBids {
         return this;
     }
     public async get() {
-        const url = `${this._url}${this._ecosystem}/${this._path}`;
         const data = {};
         data["limit"] = this._limit;
         data["offset"] = this._offset;
-        let params = querystring.stringify(data);
+        let params = new URLSearchParams(data).toString();
         if (params != "") {
             params = "?" + params;
         }
+        const url = `${this._url}${this._ecosystem}/${this._path}${params}`;
         return await utils.get(url);
     }
 }

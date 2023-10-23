@@ -1,12 +1,15 @@
 {
   "name": "tako-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "build/src/index.js",
   "license": "MIT",
   "types": "build/src/index.d.ts",
   "scripts": {
     "build": "tsc",
     "start": "nodemon test/test.ts"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   },
   "devDependencies": {
     "@types/node": "^18.7.21",
@@ -15,6 +18,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "axios": "^1.5.1",
     "ethers": "^6.8.0"
   }
 }

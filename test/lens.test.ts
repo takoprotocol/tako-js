@@ -27,7 +27,7 @@ async function curatorLastBidPrice() {
     console.log(JSON.stringify(res));
 }
 async function curatorAccepted() {
-    const res = await ecosystem.curatorAccepted(undefined, 0);
+    const res = await ecosystem.curatorAccepted(34550, 0);
     console.log(JSON.stringify(res));
 }
 async function bidsReceivedStats() {
