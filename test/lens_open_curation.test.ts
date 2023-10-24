@@ -3,7 +3,7 @@ const tako = new TakoV2(CONSTANT.Network.LOCALHOST);
 const ecosystem = tako.lensOpenCuration;
 (async () => {
     try {
-        indexPairs().catch(error => {
+        bidsCreated().catch(error => {
             console.log(`error:${error}`);
         });
     } catch (error) {
@@ -38,7 +38,7 @@ async function bidsCreated() {
     const bidTypes = ["QuotedPublication", "Post"];
     //addresses(addresses). bidType(bidTypes).
     const a = ecosystem.bidsCreated.addresses(addresses).bidType(bidTypes).
-        limit(10).offset(0).sort("id").DESC.state("Pass");
+        limit(10).offset(0).sort(CONSTANT.Sort.CreateAt).DESC//.state(CONSTANT.State.Pass);
     const res = await a.get();
     console.log(JSON.stringify(res));
 }

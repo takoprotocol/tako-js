@@ -3,5 +3,14 @@ enum Network {
     MAINNET = 'mainnet',
     LOCALHOST = 'localhost'
 }
-
-export { Network }
+enum Sort {
+    BidAmount = "bid_amount",
+    CreateAt = "create_at",
+    UpdateAt = "update_at",
+}
+enum State {
+    Pass = 'Pass',
+    Pending = 'Pending',
+    Cancel = 'Cancel',
+}
+export { Network, State, Sort }

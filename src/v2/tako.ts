@@ -25,7 +25,7 @@ class TakoV2 {
     private _token: Token = new Token();
     constructor(network: Network) {
         this._network = network;
-        this._url = env.getTakoUrl(network);
+        this._url = env.getTakoV2Url(network);
         EcosystemBasic.setToken(this._token);
         this._lens = new Lens(network, this._url);
         this._lensOpenCuration = new LensOpenCuration(network, this._url);
@@ -135,7 +135,5 @@ class TakoV2 {
         return await utils.get(url);
     }
 }
-
-
 
 export { TakoV2 }

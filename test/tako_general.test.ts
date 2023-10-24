@@ -10,7 +10,7 @@ const privateKey = "0xaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaa
 (async () => {
     try {
 
-        await refreshToken().catch(err => {
+        await getToken().catch(err => {
             console.log(`error:${err}`);
         });
         //generateMessage();

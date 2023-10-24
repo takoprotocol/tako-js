@@ -5,7 +5,7 @@ enum Ecosystem {
     LENS_OPEN_CURATION = "lens/open_curation"
 }
 
-function getTakoUrl(network: Network): string {
+function getTakoV2Url(network: Network): string {
     switch (network) {
         case Network.TESTNET:
             return "https://testapi.takoyaki.so/v2/";
@@ -16,6 +16,5 @@ function getTakoUrl(network: Network): string {
         default:
             return "https://api.takoyaki.so/v2/";
     }
-
 }
-export { Ecosystem, getTakoUrl }
+export { Ecosystem, getTakoV2Url }

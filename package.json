@@ -5,7 +5,7 @@
   "license": "MIT",
   "types": "build/src/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "rmdir /s /q build\\src && tsc",
     "start": "nodemon test/test.ts"
   },
   "engines": {

@@ -1,4 +1,6 @@
 import { utils } from '../utils';
+import { SortType } from './enums';
+import { Sort } from '../constant';
 
 class GetBids {
     protected _url: string;
@@ -9,8 +11,8 @@ class GetBids {
     protected _limit: number = 10;
     protected _offset: number = 0;
     protected _ids: number[] = [];
-    protected _sortType: string = "desc";
-    protected _sort: string = "bid_amount";
+    protected _sortType: string = SortType.DESC;
+    protected _sort: string = Sort.BidAmount;
     protected _bidType: string[] = [];
     constructor(url: string, ecosystem: string, idsKeyName: string, path: string) {
         this._url = url;
@@ -31,11 +33,11 @@ class GetBids {
         return this;
     }
     public get DESC() {
-        this._sortType = "desc";
+        this._sortType = SortType.DESC;
         return this;
     }
     public get ASC() {
-        this._sortType = "asc";
+        this._sortType = SortType.ASC;
         return this;
     }
     public ids(ids: number[]) {
