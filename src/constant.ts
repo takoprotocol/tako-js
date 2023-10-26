@@ -13,4 +13,9 @@ enum State {
     Pending = 'Pending',
     Cancel = 'Cancel',
 }
-export { Network, State, Sort }
+enum OpenCurationAllBidsStatus {
+    All = 'All',
+    Pending = 'Pending',
+    Ended = 'Ended',
+}
+export { Network, State, Sort, OpenCurationAllBidsStatus }

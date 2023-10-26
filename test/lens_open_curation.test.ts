@@ -1,9 +1,9 @@
 import { CONSTANT, TakoV2 } from '../src';
-const tako = new TakoV2(CONSTANT.Network.LOCALHOST);
+const tako = new TakoV2(CONSTANT.Network.TESTNET);
 const ecosystem = tako.lensOpenCuration;
 (async () => {
     try {
-        bidsCreated().catch(error => {
+        allBids().catch(error => {
             console.log(`error:${error}`);
         });
     } catch (error) {
@@ -53,5 +53,10 @@ async function register() {
 }
 async function verifyBid() {
     const res = await ecosystem.verifyBid("0xAA781B0e73c44E64a662CF1891a2A45176cD7932", 1, "0x01-0x01");//, [34370]
+    console.log(JSON.stringify(res));
+}
+async function allBids() {
+    const a = await ecosystem.allBids.DESC.status(CONSTANT.OpenCurationAllBidsStatus.Pending);
+    const res = await a.get();
     console.log(JSON.stringify(res));
 }
