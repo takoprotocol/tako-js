@@ -140,4 +140,4 @@ enum Apis {
     BidsCreated = 'get_bids_created',
     VerifyBid = 'verify_bid',
 }
-export { EcosystemBasic }
+export { EcosystemBasic, BidsCreated, BidsCreatedStats }

@@ -78,4 +78,4 @@ class AllBids {
         return await utils.post(url, reqBody);
     }
 }
-export { EcosystemOpenCuration }
+export { EcosystemOpenCuration, AllBids }

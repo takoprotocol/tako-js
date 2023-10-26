@@ -76,4 +76,4 @@ enum Apis {
     BidsReceived = 'get_bids_received',
     IgnoreBid = 'ignore_bid',
 }
-export { EcosystemP2p }
+export { EcosystemP2p, BidsIgnored, BidsReceived }

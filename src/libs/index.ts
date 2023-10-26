@@ -1,4 +1,3 @@
-import { GetBids, PassedBids } from './bids';
-import { Token } from './token';
-import { SortType } from './enums';
-export { GetBids, PassedBids, Token, SortType }
+export { GetBids, PassedBids } from './bids';
+export { Token } from './token';
+export { SortType } from './enums';

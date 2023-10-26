@@ -1,4 +1,2 @@
-import * as env from './env';
-import * as utils from './utils';
-
-export { env, utils }
+export * as env from './env';
+export * as utils from './utils';
