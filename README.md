@@ -1,5 +1,5 @@
 # tako-js
-[![npm version](https://img.shields.io/badge/npm-1.0.1-brightgreen.svg)](https://www.npmjs.com/package/tako-js)
+[![npm version](https://img.shields.io/badge/npm-1.0.2-brightgreen.svg)](https://www.npmjs.com/package/tako-js)
 
 Tako API Client, which facilitates interaction with Tako API without managing cumbersome APIs, helps you focus on your business.
 
