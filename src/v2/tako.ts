@@ -4,6 +4,7 @@ import * as ethers from 'ethers';
 import { Lens } from './lens';
 import { LensOpenCuration } from './lens_open_curation';
 import { Farcaster } from './farcaster';
+import { LensOpenCurationV2 } from './lens_open_curation_v2';
 import { EcosystemBasic } from '../ecosystem';
 import { Token } from '../libs';
 
@@ -22,6 +23,7 @@ class TakoV2 {
     private _lens: Lens;
     private _lensOpenCuration: LensOpenCuration;
     private _farcaster: Farcaster;
+    private _lensOpenCurationV2: LensOpenCurationV2;
     private _token: Token = new Token();
     constructor(network: Network) {
         this._network = network;
@@ -30,6 +32,7 @@ class TakoV2 {
         this._lens = new Lens(network, this._url);
         this._lensOpenCuration = new LensOpenCuration(network, this._url);
         this._farcaster = new Farcaster(network, this._url);
+        this._lensOpenCurationV2 = new LensOpenCurationV2(network, this._url);
     }
     private generateDateString(): string {
         //2023-07-19T05:51:05.776Z Z UTC time
@@ -56,7 +59,9 @@ class TakoV2 {
     public get lensOpenCuration(): LensOpenCuration {
         return this._lensOpenCuration;
     }
-
+    public get lensOpenCurationV2(): LensOpenCurationV2 {
+        return this._lensOpenCurationV2;
+    }
 
     public async takoInfo() {
         const url = `${this._url}${Apis.TakohubInfo}`;
