@@ -3,7 +3,7 @@ const tako = new TakoV2(CONSTANT.Network.LOCALHOST);
 const ecosystem = tako.lensOpenCurationV2;
 (async () => {
     try {
-        allBids().catch(error => {
+        curatorStatus().catch(error => {
             console.log(`error:${error}`);
         });
     } catch (error) {
@@ -58,5 +58,9 @@ async function verifyBid() {
 async function allBids() {
     const a = await ecosystem.allBids.DESC.status(CONSTANT.OpenCurationAllBidsStatus.All);
     const res = await a.get();
+    console.log(JSON.stringify(res));
+}
+async function curatorStatus() {
+    const res = await ecosystem.curatorStatus(5, 445);
     console.log(JSON.stringify(res));
 }
