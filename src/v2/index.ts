@@ -1,4 +1,6 @@
 export { TakoV2 } from './tako';
-export { Lens as LensV2 } from './lens';
-export { Farcaster as FarcasterV2 } from './farcaster';
-export { LensOpenCuration as LensOpenCurationV2 } from './lens_open_curation';
+export { Lens } from './lens';
+export { Farcaster } from './farcaster';
+export { LensOpenCuration } from './lens_open_curation';
+export { LensV2 } from './lens_v2';
+export { LensOpenCurationV2 } from './lens_open_curation_v2';

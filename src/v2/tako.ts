@@ -2,6 +2,7 @@ import { Network } from '../constant';
 import { env, utils } from '../utils';
 import * as ethers from 'ethers';
 import { Lens } from './lens';
+import { LensV2 } from './lens_v2';
 import { LensOpenCuration } from './lens_open_curation';
 import { Farcaster } from './farcaster';
 import { LensOpenCurationV2 } from './lens_open_curation_v2';
@@ -21,6 +22,7 @@ class TakoV2 {
     private _network: Network;
     private _url: string;
     private _lens: Lens;
+    private _lensV2: LensV2;
     private _lensOpenCuration: LensOpenCuration;
     private _farcaster: Farcaster;
     private _lensOpenCurationV2: LensOpenCurationV2;
@@ -30,6 +32,7 @@ class TakoV2 {
         this._url = env.getTakoV2Url(network);
         EcosystemBasic.setToken(this._token);
         this._lens = new Lens(network, this._url);
+        this._lensV2 = new LensV2(network, this._url);
         this._lensOpenCuration = new LensOpenCuration(network, this._url);
         this._farcaster = new Farcaster(network, this._url);
         this._lensOpenCurationV2 = new LensOpenCurationV2(network, this._url);
@@ -52,6 +55,9 @@ class TakoV2 {
     }
     public get lens(): Lens {
         return this._lens;
+    }
+    public get lensV2(): LensV2 {
+        return this._lensV2;
     }
     public get farcaster(): Farcaster {
         return this._farcaster;

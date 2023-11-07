@@ -3,7 +3,8 @@ enum Ecosystem {
     LENS = 'lens',
     FARCASTER = 'farcaster',
     LENS_OPEN_CURATION = "lens/open_curation",
-    LENS_OPEN_CURATION_V2 = "lens_v2/open_curation"
+    LENS_OPEN_CURATION_V2 = "lens_v2/open_curation",
+    LENSV2 = 'lens_v2',
 }
 
 function getTakoV2Url(network: Network): string {
