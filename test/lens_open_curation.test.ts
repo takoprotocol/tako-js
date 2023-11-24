@@ -56,7 +56,7 @@ async function verifyBid() {
     console.log(JSON.stringify(res));
 }
 async function allBids() {
-    const a = await ecosystem.allBids.DESC.status(CONSTANT.OpenCurationAllBidsStatus.Pending);
+    const a = await ecosystem.allBids.DESC.status(CONSTANT.OpenCurationAllBidsStatus.Ended);
     const res = await a.get();
     console.log(JSON.stringify(res));
 }

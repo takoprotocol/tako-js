@@ -9,7 +9,7 @@ enum Apis {
 }
 class LensOpenCurationV2 extends EcosystemOpenCuration {
     constructor(network: CONSTANT.Network, url: string) {
-        super(network, url, env.Ecosystem.LENS_OPEN_CURATION_V2, "profileIds", "profileId");
+        super(network, url, env.Ecosystem.LENS_OPEN_CURATION, "profileIds", "profileId");
     }
     public get passedBids(): PassedBids {
         return new PassedBids(this.url, this.ecosystem, Apis.PassedBids);

@@ -1,9 +1,9 @@
 import { CONSTANT, TakoV2 } from '../src';
-const tako = new TakoV2(CONSTANT.Network.LOCALHOST);
+const tako = new TakoV2(CONSTANT.Network.TESTNET);
 const ecosystem = tako.lensOpenCurationV2;
 (async () => {
     try {
-        curatorStatus().catch(error => {
+        allBids().catch(error => {
             console.log(`error:${error}`);
         });
     } catch (error) {
@@ -61,6 +61,6 @@ async function allBids() {
     console.log(JSON.stringify(res));
 }
 async function curatorStatus() {
-    const res = await ecosystem.curatorStatus(5, 445);
+    const res = await ecosystem.curatorStatus(20, 445);
     console.log(JSON.stringify(res));
 }
